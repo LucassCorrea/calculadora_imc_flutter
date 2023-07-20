@@ -1,3 +1,4 @@
+import 'package:calculadora_imc_flutter/pages/home_page.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -9,12 +10,26 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: Scaffold(
-        body: Center(
-          child: Text('Hello World!'),
-        ),
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        brightness: Brightness.light,
+        primarySwatch: Colors.deepOrange,
+        // colorScheme: const ColorScheme(
+        //   brightness: Brightness.light,
+        //   primary: Colors.deepOrange,
+        //   onPrimary: Colors.black,
+        //   secondary: Colors.white,
+        //   onSecondary: Colors.black,
+        //   error: Colors.red,
+        //   onError: Colors.black,
+        //   background: Colors.white,
+        //   onBackground: Colors.deepOrange,
+        //   surface: Colors.white,
+        //   onSurface: Colors.deepOrange,
+        // ),
       ),
+      home: const HomePage(),
     );
   }
 }
