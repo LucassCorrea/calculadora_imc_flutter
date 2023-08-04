@@ -8,6 +8,7 @@ class TextFieldWidget extends StatefulWidget {
   final bool onlyNumber;
   final void Function(String)? onChanged;
   final TextEditingController controller;
+  final String? Function(String?)? validator;
 
   const TextFieldWidget({
     super.key,
@@ -17,6 +18,7 @@ class TextFieldWidget extends StatefulWidget {
     this.onlyNumber = false,
     this.errorText,
     this.onChanged,
+    this.validator,
   });
 
   @override
@@ -36,7 +38,7 @@ class _TextFieldWidgetState extends State<TextFieldWidget> {
           ),
         ),
         const SizedBox(height: 5),
-        TextField(
+        TextFormField(
           controller: widget.controller,
           keyboardType: TextInputType.number,
           inputFormatters: widget.onlyNumber == true
@@ -46,6 +48,7 @@ class _TextFieldWidgetState extends State<TextFieldWidget> {
                 ]
               : [],
           onChanged: widget.onChanged,
+          validator: widget.validator,
           decoration: InputDecoration(
             hintText: widget.hintText,
             hintStyle: const TextStyle(

@@ -1,27 +1,38 @@
-import 'package:calculadora_imc_flutter/models/imc_model.dart';
+import 'package:calculadora_imc_flutter/core/models/imc_model.dart';
+import 'package:hive/hive.dart';
 
 class IMCRepository {
-  final List<IMCModel> _results = [];
+  static late Box _box;
+
+  IMCRepository._criar();
+
+  static Future<IMCRepository> load() async {
+    if (Hive.isBoxOpen('imc')) {
+      _box = Hive.box<IMCModel>('imc');
+    } else {
+      _box = await Hive.openBox<IMCModel>('imc');
+    }
+    return IMCRepository._criar();
+  }
 
   Future<void> add(IMCModel imc) async {
-    await Future.delayed(const Duration(milliseconds: 100));
-
-    _results.add(imc);
+    await _box.add(imc);
   }
 
-  Future<void> edit(String id) async {
-    await Future.delayed(const Duration(milliseconds: 100));
-    _results.where((element) => element.id == id).first;
+  Future<void> edit(IMCModel imc) async {
+    await imc.save();
   }
 
-  Future<void> remove(String id) async {
-    await Future.delayed(const Duration(milliseconds: 100));
-    _results.remove(_results.where((element) => element.id == id).first);
+  Future<void> remove(IMCModel imc) async {
+    await imc.delete();
   }
 
-  Future get() async {
-    await Future.delayed(const Duration(milliseconds: 100));
-    return _results;
+  Future<void> removeAll() async {
+    await _box.clear();
+  }
+
+  List<IMCModel> get() {
+    return _box.values.cast<IMCModel>().toList();
   }
 
   static double calcularIMC(double peso, double altura) {
@@ -33,7 +44,7 @@ class IMCRepository {
   }
 
   static String classificacaoIMC(double imc) {
-    if (imc < 16) {
+    if (imc >= 0 && imc < 16) {
       return "Magreza grave";
     } else if (imc >= 16 && imc < 17) {
       return "Magreza moderada";
@@ -47,8 +58,10 @@ class IMCRepository {
       return "Obesidade grau I";
     } else if (imc >= 35 && imc < 40) {
       return "Obesidade grau II (severa)";
-    } else {
+    } else if (imc >= 40) {
       return "Obesidade grau III (mórbida)";
+    } else {
+      return "Não classificado";
     }
   }
 }
