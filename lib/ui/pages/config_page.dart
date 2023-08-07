@@ -18,7 +18,6 @@ SharedRepository storage = SharedRepository();
 class _ConfigPageState extends State<ConfigPage> {
   final _alturaController = TextEditingController(text: "");
   bool isAlturaFixa = false;
-  final String _alturaError = "";
   final _formKey = GlobalKey<FormState>();
 
   @override
@@ -71,7 +70,6 @@ class _ConfigPageState extends State<ConfigPage> {
                 padding: const EdgeInsets.symmetric(vertical: 10),
                 child: TextFieldWidget(
                   text: "Altura (cm)",
-                  errorText: _alturaError,
                   controller: _alturaController,
                   onlyNumber: true,
                   validator: (text) => FormValidator.errorText(text!),
@@ -84,7 +82,7 @@ class _ConfigPageState extends State<ConfigPage> {
                   if (isAlturaFixa == false) {
                     await storage.setIsFixedAltura(isAlturaFixa);
                     _alturaController.text = "";
-      
+
                     if (context.mounted) {
                       MessengerSnackBar.mensseger(
                         context,
@@ -96,7 +94,7 @@ class _ConfigPageState extends State<ConfigPage> {
                     await storage
                         .setAltura(Utils.toDouble(_alturaController.text));
                     await storage.setIsFixedAltura(isAlturaFixa);
-      
+
                     if (context.mounted) {
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
